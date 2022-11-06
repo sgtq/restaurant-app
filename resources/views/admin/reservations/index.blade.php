@@ -8,7 +8,8 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="flex justify-end m-2 p-2">
-                <a href="{{ route('admin.reservations.create') }}" class="px-4 py-2 bg-indigo-500 hover:bg-indigo-700 rounded-lg text-white">
+                <a href="{{ route('admin.reservations.create') }}"
+                   class="px-4 py-2 bg-indigo-500 hover:bg-indigo-700 rounded-lg text-white">
                     New Reservation
                 </a>
             </div>
@@ -60,13 +61,13 @@
                                     {{ $reservation->phone }}
                                 </td>
                                 <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $reservation->guests_number }}
+                                    {{ $reservation->guest_number }}
                                 </td>
                                 <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $reservation->date }}
+                                    {{ $reservation->datetime }}
                                 </td>
                                 <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $reservation->table_id }}
+                                    {{ $reservation->table->name }}
                                 </td>
                                 <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <div class="flex space-x-2">
@@ -76,7 +77,7 @@
                                         <form class="px-4 py-2 bg-red-500 hover:gb-red-700 rounded-lg text-white"
                                               method="POST"
                                               action="{{ route('admin.reservations.destroy', $reservation->id) }}"
-                                              onsubmit="return confirm('Are you sure you want to delete reservation for {{ $reservation->last_name }}?');">
+                                              onsubmit="return confirm('Are you sure you want to delete reservation for {{ $reservation->last_name }} on {{ $reservation->datetime }}?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit">Delete</button>
