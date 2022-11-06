@@ -14,13 +14,13 @@
 
             <div class="m-2 p-2 bg-slate-100 rounded">
                 <div class="space-y-8 divide-y divide-gray-200 w-1/2 mt-10">
-                    <form method="POST" action="{{ route('admin.reservations.store') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('admin.reservations.store') }}">
                         @csrf
                         <div class="sm:col-span-6">
                             <label for="first_name" class="block text-sm font-medium text-gray-700"> First Name </label>
                             <div class="mt-1">
                                 <input type="text" id="first_name" name="first_name"
-                                       class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('name') border-red-400 @enderror" />
+                                       class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('first_name') border-red-400 @enderror" />
                             </div>
                             @error('first_name')
                             <div class="text-sm text-red-400">{{ $message }}</div>
@@ -30,7 +30,7 @@
                             <label for="last_name" class="block text-sm font-medium text-gray-700"> Last Name </label>
                             <div class="mt-1">
                                 <input type="text" id="last_name" name="last_name"
-                                       class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('name') border-red-400 @enderror" />
+                                       class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('last_name') border-red-400 @enderror" />
                             </div>
                             @error('last_name')
                             <div class="text-sm text-red-400">{{ $message }}</div>
@@ -40,7 +40,7 @@
                             <label for="email" class="block text-sm font-medium text-gray-700"> Email </label>
                             <div class="mt-1">
                                 <input type="text" id="email" name="email"
-                                       class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('name') border-red-400 @enderror" />
+                                       class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('email') border-red-400 @enderror" />
                             </div>
                             @error('email')
                             <div class="text-sm text-red-400">{{ $message }}</div>
@@ -50,7 +50,7 @@
                             <label for="phone" class="block text-sm font-medium text-gray-700"> Phone </label>
                             <div class="mt-1">
                                 <input type="text" id="phone" name="phone"
-                                       class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('name') border-red-400 @enderror" />
+                                       class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('phone') border-red-400 @enderror" />
                             </div>
                             @error('phone')
                             <div class="text-sm text-red-400">{{ $message }}</div>
@@ -60,17 +60,21 @@
                             <label for="datetime" class="block text-sm font-medium text-gray-700"> Date </label>
                             <div class="mt-1">
                                 <input type="datetime-local" id="datetime" name="datetime"
-                                       class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('name') border-red-400 @enderror" />
+                                       class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('datetime') border-red-400 @enderror" />
                             </div>
                             @error('datetime')
                             <div class="text-sm text-red-400">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="sm:col-span-6">
-                            <label for="table_id" class="block text-sm font-medium text-gray-700"> Table </label>
+                            <label for="table_id" class="block text-sm font-medium text-gray-700"> Status </label>
                             <div class="mt-1">
-                                <input type="text" id="table_id" name="table_id"
-                                       class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('name') border-red-400 @enderror" />
+                                <select id="table_id" name="table_id"
+                                        class="form-select block w-full mt-1 @error('table_id') border-red-400 @enderror">
+                                    @foreach ($tables as $table)
+                                        <option value="{{ $table->id }}">{{ $table->name }}</option>
+                                    @endforeach;
+                                </select>
                             </div>
                             @error('table_id')
                             <div class="text-sm text-red-400">{{ $message }}</div>
@@ -80,7 +84,7 @@
                             <label for="guest_number" class="block text-sm font-medium text-gray-700"> Guests </label>
                             <div class="mt-1">
                                 <input type="number" id="guest_number" name="guest_number"
-                                       class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('name') border-red-400 @enderror" />
+                                       class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('guest_number') border-red-400 @enderror" />
                             </div>
                             @error('guest_number')
                             <div class="text-sm text-red-400">{{ $message }}</div>
@@ -94,7 +98,6 @@
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
