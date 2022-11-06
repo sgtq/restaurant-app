@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ReservationStoreRequest;
 use App\Models\Reservation;
+use App\Models\Table;
 use Illuminate\Http\Request;
 
 class ReservationController extends Controller
@@ -26,7 +28,7 @@ class ReservationController extends Controller
      */
     public function create()
     {
-        return view('admin.reservations.create');
+        return view('admin.reservations.create', $this->lists());
     }
 
     /**
@@ -35,9 +37,19 @@ class ReservationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ReservationStoreRequest $request)
     {
-        //
+        Reservation::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'datetime' => $request->datetime,
+            'table_id' => $request->table_id,
+            'guest_number' => $request->guest_number,
+        ]);
+
+        return to_route('admin.reservations.index');
     }
 
     /**
@@ -57,9 +69,9 @@ class ReservationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Reservation $reservation)
     {
-        //
+        return view('admin.reservations.edit', array_merge(['reservation' => $reservation], $this->lists()));
     }
 
     /**
@@ -69,9 +81,11 @@ class ReservationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ReservationStoreRequest $request, Reservation $reservation)
     {
-        //
+        $reservation->update($request->validated());
+
+        return to_route('admin.reservations.index');
     }
 
     /**
@@ -83,5 +97,12 @@ class ReservationController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function lists()
+    {
+        return [
+            'tables' => Table::all(['id', 'name']),
+        ];
     }
 }
