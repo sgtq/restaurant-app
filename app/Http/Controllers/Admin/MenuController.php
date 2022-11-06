@@ -93,9 +93,10 @@ class MenuController extends Controller
             'price' => 'required'
         ]);
 
+        $image = $menu->image;
         if ($request->hasFile('image')) { // Check if the file has anything to change to
-            Storage::delete($menu->image); // Remove existing image from files
-            $image = $request->file('image')->store('public/menus');
+            Storage::delete($image); // Remove existing image from files
+            $image = $request->file('image')->store('public/menu');
         }
 
         $menu->update([
@@ -106,7 +107,7 @@ class MenuController extends Controller
         ]);
 
         if ($request->has('categories')) {
-            $menu->categories()->attach($request->categories);
+            $menu->categories()->sync($request->categories);
         }
 
         return to_route('admin.menus.index');
@@ -121,6 +122,7 @@ class MenuController extends Controller
     public function destroy(Menu $menu)
     {
         Storage::delete($menu->image);
+        $menu->categories()->detach();
         $menu->delete();
         return to_route('admin.menus.index');
     }
