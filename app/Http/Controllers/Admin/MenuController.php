@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryStoreRequest;
+use App\Http\Requests\MenuStoreRequest;
 use App\Models\Category;
 use App\Models\Menu;
 use Illuminate\Http\Request;
@@ -30,7 +30,6 @@ class MenuController extends Controller
     public function create()
     {
         $categories = Category::all(['id', 'name']);
-
         return view('admin.menus.create', compact('categories'));
     }
 
@@ -42,7 +41,18 @@ class MenuController extends Controller
      */
     public function store(MenuStoreRequest $request)
     {
-        //
+        $menu = Menu::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'image' => $request->file('image')->store('public/menus'),
+        ]);
+
+        if ($request->has('categories')) {
+            $menu->categories()->attach($request->categories);
+        }
+
+        return to_route('admin.menus.index');
     }
 
     /**
@@ -64,7 +74,8 @@ class MenuController extends Controller
      */
     public function edit(Menu $menu)
     {
-        return view('admin.menus.edit', compact('menu'));
+        $categories = Category::all(['id', 'name']);
+        return view('admin.menus.edit', compact('menu', 'categories'));
     }
 
     /**
@@ -74,23 +85,29 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Menu $item)
+    public function update(Request $request, Menu $menu)
     {
         $request->validate([
             'name' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'price' => 'required'
         ]);
 
         if ($request->hasFile('image')) { // Check if the file has anything to change to
-            Storage::delete($item->image); // Remove existing image from files
+            Storage::delete($menu->image); // Remove existing image from files
             $image = $request->file('image')->store('public/menus');
         }
 
-        $item->update([
+        $menu->update([
             'name' => $request->name,
             'description' => $request->description,
+            'price' => $request->price,
             'image' => $image
         ]);
+
+        if ($request->has('categories')) {
+            $menu->categories()->attach($request->categories);
+        }
 
         return to_route('admin.menus.index');
     }
@@ -101,10 +118,10 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Menu $item)
+    public function destroy(Menu $menu)
     {
-        Storage::delete($item->image);
-        $item->delete();
+        Storage::delete($menu->image);
+        $menu->delete();
         return to_route('admin.menus.index');
     }
 }
