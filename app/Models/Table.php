@@ -26,7 +26,7 @@ class Table extends Model
         return $this->belongsTo(TableLocation::class);
     }
 
-    public function tables()
+    public function reservations()
     {
         return $this->hasMany(Reservation::class);
     }

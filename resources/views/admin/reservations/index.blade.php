@@ -38,7 +38,7 @@
                                     Date
                                 </th>
                                 <th scope="col" class="py-3 px-6">
-                                    TABLE ?????
+                                    Table
                                 </th>
                                 <th scope="col" class="relative py-3 px-6">
                                     <span class="sr-only">Actions</span>

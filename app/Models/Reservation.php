@@ -19,6 +19,10 @@ class Reservation extends Model
         'table_id',
     ];
 
+    protected $dates = [
+        'datetime'
+    ];
+
     public function table() {
         return $this->belongsTo(Table::class);
     }
