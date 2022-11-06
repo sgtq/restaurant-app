@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Table;
+use App\Models\TableLocation;
+use App\Models\TableStatus;
+use App\Http\Requests\TableStoreRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TableController extends Controller
 {
@@ -26,7 +30,7 @@ class TableController extends Controller
      */
     public function create()
     {
-        return view('admin.tables.create');
+        return view('admin.tables.create', $this->lists());
     }
 
     /**
@@ -35,9 +39,16 @@ class TableController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TableStoreRequest $request)
     {
-        //
+        $table = Table::create([
+            'name' => $request->name,
+            'guest_number' => $request->guest_number,
+            'status_id' => $request->status,
+            'location_id' => $request->location,
+        ]);
+
+        return to_route('admin.tables.index');
     }
 
     /**
@@ -57,9 +68,9 @@ class TableController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Table $table)
     {
-        //
+        return view('admin.tables.edit', array_merge(['table' => $table], $this->lists()));
     }
 
     /**
@@ -69,9 +80,23 @@ class TableController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Table $table)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'guest_number' => 'required',
+            'status' => 'required',
+            'location' => 'required',
+        ]);
+
+        $table->update([
+            'name' => $request->name,
+            'guest_number' => $request->guest_number,
+            'status_id' => $request->status,
+            'location_id' => $request->location,
+        ]);
+
+        return to_route('admin.tables.index');
     }
 
     /**
@@ -80,8 +105,18 @@ class TableController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Table $table)
     {
-        //
+        $table->delete();
+
+        return to_route('admin.tables.index');
+    }
+
+    private function lists()
+    {
+        return [
+            'tableStatuses' => TableStatus::all(['id', 'name']),
+            'tableLocations' => TableLocation::all(['id', 'name'])
+        ];
     }
 }

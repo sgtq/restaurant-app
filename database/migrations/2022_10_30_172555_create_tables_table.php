@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->integer('guest_number');
-            $table->string('status')->default('available');
-            $table->string('location');
+            $table->string('status_id')->default(2);
+            $table->string('location_id');
             $table->timestamps();
         });
     }
