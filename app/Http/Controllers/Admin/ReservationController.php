@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ReservationStoreRequest;
 use App\Models\Reservation;
 use App\Models\Table;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ReservationController extends Controller
@@ -39,15 +40,23 @@ class ReservationController extends Controller
      */
     public function store(ReservationStoreRequest $request)
     {
-        Reservation::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'datetime' => $request->datetime,
-            'table_id' => $request->table_id,
-            'guest_number' => $request->guest_number,
-        ]);
+        $table = Table::findOrFail($request->table_id); // Table to compare date and seats validation
+
+        // Validate guest_number for selected table
+        if ($request->guest_number > $table->guest_number) {
+            return back()->with('warning', 'This table does not have enough seats ('.$table->guest_number.')');
+        }
+
+        $request_date = Carbon::parse($request->datetime);
+        foreach ($table->reservations as $reservation) {
+            if ($reservation->datetime->format('Y-m-d') == $request_date->format('Y-m-d')) {
+                return back()->with('warning', 'This table is already reserved for this date');
+            }
+        }
+
+        // TODO validate time 1 hour after or before
+
+        Reservation::create($request->validated());
 
         return to_route('admin.reservations.index')
             ->with('success', "Reservation $request->name created successfully");
@@ -84,6 +93,12 @@ class ReservationController extends Controller
      */
     public function update(ReservationStoreRequest $request, Reservation $reservation)
     {
+        // Validate guest_number for selected table
+        $table = Table::findOrFail($request->table_id);
+        if ($request->guest_number > $table->guest_number) {
+            return back()->with('warning', 'This table does not have enough seats ('.$table->guest_number.')');
+        }
+
         $reservation->update($request->validated());
 
         return to_route('admin.reservations.index')
@@ -100,14 +115,14 @@ class ReservationController extends Controller
     {
         $reservation->delete();
 
-        return to_route('admin.tables.index')
+        return to_route('admin.reservations.index')
             ->with('success', "Reservation $reservation->name deleted");
     }
 
     private function lists()
     {
         return [
-            'tables' => Table::where(['status_id' => 2])->get(['id', 'name']), // Only Available (status_id = 2) tables
+            'tables' => Table::where(['status_id' => 2])->get(['id', 'name', 'guest_number']), // Only Available (status_id = 2) tables
         ];
     }
 }
