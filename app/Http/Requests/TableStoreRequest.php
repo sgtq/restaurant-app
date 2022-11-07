@@ -24,10 +24,10 @@ class TableStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'guest_number' => 'required',
-            'status' => 'required',
-            'location' => 'required',
+            'name' => ['required'],
+            'guest_number' => ['required'],
+            'status' => ['required'],
+            'location' => ['required'],
         ];
     }
 }

@@ -79,6 +79,7 @@ class CategoryController extends Controller
             'description' => 'required'
         ]);
 
+        $image = $category->image;
         if ($request->hasFile('image')) { // Check if the file has anything to change to
             Storage::delete($category->image); // Remove existing image from files
             $image = $request->file('image')->store('public/categories');
@@ -102,8 +103,9 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         Storage::delete($category->image);
+        $category->menus()->detach();
         $category->delete();
         return to_route('admin.categories.index')
-            ->with('success', "'Category $category->name deleted'");
+            ->with('success', "Category '$category->name' deleted");
     }
 }
