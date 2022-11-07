@@ -49,7 +49,8 @@ class ReservationController extends Controller
             'guest_number' => $request->guest_number,
         ]);
 
-        return to_route('admin.reservations.index');
+        return to_route('admin.reservations.index')
+            ->with('success', "Reservation $request->name created successfully");
     }
 
     /**
@@ -85,7 +86,8 @@ class ReservationController extends Controller
     {
         $reservation->update($request->validated());
 
-        return to_route('admin.reservations.index');
+        return to_route('admin.reservations.index')
+            ->with('success', "Reservation $request->name updated successfully");
     }
 
     /**
@@ -94,15 +96,18 @@ class ReservationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Reservation $reservation)
     {
-        //
+        $reservation->delete();
+
+        return to_route('admin.tables.index')
+            ->with('success', "Reservation $reservation->name deleted");
     }
 
     private function lists()
     {
         return [
-            'tables' => Table::all(['id', 'name']),
+            'tables' => Table::where(['status_id' => 2])->get(['id', 'name']), // Only Available (status_id = 2) tables
         ];
     }
 }

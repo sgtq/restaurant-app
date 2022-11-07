@@ -36,7 +36,6 @@ class TableController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(TableStoreRequest $request)
@@ -48,7 +47,8 @@ class TableController extends Controller
             'location_id' => $request->location,
         ]);
 
-        return to_route('admin.tables.index');
+        return to_route('admin.tables.index')
+            ->with('success', "Table $request->name created successfully");
     }
 
     /**
@@ -65,7 +65,6 @@ class TableController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit(Table $table)
@@ -76,11 +75,9 @@ class TableController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Table $table)
+    public function update(TableStoreRequest $request, Table $table)
     {
         $request->validate([
             'name' => 'required',
@@ -96,20 +93,22 @@ class TableController extends Controller
             'location_id' => $request->location,
         ]);
 
-        return to_route('admin.tables.index');
+        return to_route('admin.tables.index')
+            ->with('success', "Table $request->name created successfully");
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Table $table)
     {
+        $table->reservations()->delete();
         $table->delete();
 
-        return to_route('admin.tables.index');
+        return to_route('admin.tables.index')
+            ->with('success', "Table $table->name deleted");
     }
 
     private function lists()

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MenuStoreRequest;
 use App\Models\Category;
 use App\Models\Menu;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
@@ -35,9 +34,6 @@ class MenuController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(MenuStoreRequest $request)
     {
@@ -52,7 +48,8 @@ class MenuController extends Controller
             $menu->categories()->attach($request->categories);
         }
 
-        return to_route('admin.menus.index');
+        return to_route('admin.menus.index')
+            ->with('success', "Menu $request->name created successfully");
     }
 
     /**
@@ -68,9 +65,6 @@ class MenuController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit(Menu $menu)
     {
@@ -80,12 +74,8 @@ class MenuController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Menu $menu)
+    public function update(MenuStoreRequest $request, Menu $menu)
     {
         $request->validate([
             'name' => 'required',
@@ -110,20 +100,20 @@ class MenuController extends Controller
             $menu->categories()->sync($request->categories);
         }
 
-        return to_route('admin.menus.index');
+        return to_route('admin.menus.index')
+            ->with('success', "Menu $menu->name updated successfully");
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function destroy(Menu $menu)
     {
         Storage::delete($menu->image);
         $menu->categories()->detach();
         $menu->delete();
-        return to_route('admin.menus.index');
+
+        return to_route('admin.menus.index')
+            ->with('success', "Menu $menu->name deleted successfully");
     }
 }

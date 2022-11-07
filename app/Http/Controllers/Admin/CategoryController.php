@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
@@ -34,7 +33,6 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(CategoryStoreRequest $request)
@@ -45,13 +43,13 @@ class CategoryController extends Controller
             'image' => $request->file('image')->store('public/categories')
         ]);
 
-        return to_route('admin.categories.index');
+        return to_route('admin.categories.index')
+            ->with('success', "Category $request->name created successfully");
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -62,7 +60,6 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit(Category $category)
@@ -73,11 +70,9 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryStoreRequest $request, Category $category)
     {
         $request->validate([
             'name' => 'required',
@@ -95,19 +90,20 @@ class CategoryController extends Controller
             'image' => $image
         ]);
 
-        return to_route('admin.categories.index');
+        return to_route('admin.categories.index')
+            ->with('success', "Category $category->name updated successfully");
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Category $category)
     {
         Storage::delete($category->image);
         $category->delete();
-        return to_route('admin.categories.index');
+        return to_route('admin.categories.index')
+            ->with('success', "'Category $category->name deleted'");
     }
 }
