@@ -13,7 +13,7 @@
         </div>
         <div class="flex flex-col items-center mt-12 text-center">
             <span class="relative inline-flex w-full md:w-auto">
-                <a href="#_" type="button"
+                <a href="{{ route('reservations.stepOne') }}" type="button"
                     class="inline-flex items-center justify-center px-6 py-2 text-base font-bold leading-6 text-white bg-green-600 rounded-full lg:w-full md:w-auto hover:bg-green-500 focus:outline-none">
                     Make your Reservation
                 </a>
@@ -21,6 +21,7 @@
         </div>
     </div>
     <!-- End Main Hero Content -->
+
     <section class="px-2 py-32 bg-white md:px-0">
         <div class="container items-center max-w-6xl px-8 mx-auto xl:px-5">
             <div class="flex flex-wrap items-center sm:-mx-3">
@@ -39,7 +40,7 @@
                             Repellendus mollitia quaerat est voluptas!
                         </p>
                         <div class="relative flex">
-                            <a href="#_"
+                            <a href="#"
                                class="flex items-center w-full px-6 py-3 mb-3 text-lg text-white bg-green-600 rounded-md sm:mb-0 hover:bg-green-700 sm:w-auto">
                                 Read More
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-1" viewBox="0 0 24 24" fill="none"
@@ -53,12 +54,13 @@
                 </div>
                 <div class="w-full md:w-1/2">
                     <div class="w-full h-auto overflow-hidden rounded-md shadow-xl sm:rounded-xl">
-                        <img src="https://cdn.pixabay.com/photo/2017/08/03/13/30/people-2576336_960_720.jpg" />
+                        <img src="https://cdn.pixabay.com/photo/2017/08/03/13/30/people-2576336_960_720.jpg" alt="" />
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
     <!-- About Us -->
     <section class="py-20 bg-gray-50">
         <div class="container items-center max-w-6xl px-4 px-10 mx-auto sm:px-20 md:px-32 lg:px-16">
@@ -109,35 +111,10 @@
             </div>
         </div>
     </section>
+
     <!-- Today's Special -->
-    <section class="mt-8 bg-white">
-        <div class="mt-4 text-center">
-            <h3 class="text-2xl font-bold">Our Menu</h3>
-            <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">
-                TODAY'S SPECIALS
-            </h2>
-        </div>
-        <div class="container w-full px-5 py-6 mx-auto">
-            <div class="grid lg:grid-cols-4 gap-y-6">
-                <div class="max-w-xs mx-4 mb-2 rounded-lg shadow-lg">
-                    <img class="w-full h-48" src="https://cdn.pixabay.com/photo/2014/11/05/15/57/salmon-518032_960_720.jpg"
-                         alt="Image" />
-                    <div class="px-6 py-4">
-                        <div class="flex mb-2">
-                            <span class="px-4 py-0.5 text-sm bg-red-500 rounded-full text-red-50">Seafood</span>
-                        </div>
-                        <h4 class="mb-3 text-xl font-semibold tracking-tight text-green-600 uppercase">salmon fish 1 seafood</h4>
-                        <p class="leading-normal text-gray-700">Lorem ipsum dolor, sit amet cons ectetur adipis icing
-                            elit.</p>
-                    </div>
-                    <div class="flex items-center justify-between p-4">
-                        <button class="px-4 py-2 bg-green-600 text-green-50">Order Now</button>
-                        <span class="text-xl text-green-600">$20.0</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <x-specials-component />
+
     <!-- Testimonials -->
     <section class="pt-4 pb-12 bg-gray-800">
         <div class="my-16 text-center">
@@ -149,7 +126,7 @@
             <div class="max-w-md p-4 bg-white rounded-lg shadow-lg">
                 <div class="flex justify-center -mt-16 md:justify-end">
                     <img class="object-cover w-20 h-20 border-2 border-green-500 rounded-full"
-                         src="https://images.unsplash.com/photo-1499714608240-22fc6ad53fb2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80">
+                         src="https://images.unsplash.com/photo-1499714608240-22fc6ad53fb2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" alt="" />
                 </div>
                 <div>
                     <h2 class="text-3xl font-semibold text-gray-800">Food</h2>
@@ -164,7 +141,7 @@
             <div class="max-w-md p-4 bg-white rounded-lg shadow-lg">
                 <div class="flex justify-center -mt-16 md:justify-end">
                     <img class="object-cover w-20 h-20 border-2 border-green-500 rounded-full"
-                         src="https://cdn.pixabay.com/photo/2018/01/04/21/15/young-3061652__340.jpg">
+                         src="https://cdn.pixabay.com/photo/2018/01/04/21/15/young-3061652__340.jpg" alt="" />
                 </div>
                 <div>
                     <h2 class="text-3xl font-semibold text-gray-800">Food</h2>
@@ -179,7 +156,7 @@
             <div class="max-w-md p-4 bg-white rounded-lg shadow-lg">
                 <div class="flex justify-center -mt-16 md:justify-end">
                     <img class="object-cover w-20 h-20 border-2 border-green-500 rounded-full"
-                         src="https://cdn.pixabay.com/photo/2018/01/18/17/48/purchase-3090818__340.jpg">
+                         src="https://cdn.pixabay.com/photo/2018/01/18/17/48/purchase-3090818__340.jpg" alt="" />
                 </div>
                 <div>
                     <h2 class="text-3xl font-semibold text-gray-800">Food</h2>
