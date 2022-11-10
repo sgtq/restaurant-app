@@ -24,12 +24,17 @@ use App\Http\Controllers\Frontend\ReservationController as FrontendReservationCo
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/thankyou', function() {
+    return view('reservations.thankyou');
+})->name('reservations.thankyou');
 
 Route::get('/categories', [FrontendCategoryController::class, 'index'])->name('categories.index');
 Route::get('/categories/{category}', [FrontendCategoryController::class, 'show'])->name('categories.show');
 Route::get('/menus', [FrontendMenuController::class, 'index'])->name('menus.index');
-Route::get('/reservation/step-one', [FrontendReservationController::class, 'stepOne'])->name('reservations.stepOne');
-Route::get('/reservation/step-two', [FrontendReservationController::class, 'stepTwo'])->name('reservations.stepTwo');
+Route::get('/reservations/step-one', [FrontendReservationController::class, 'stepOne'])->name('reservations.step-one');
+Route::post('/reservations/step-one', [FrontendReservationController::class, 'storeStepOne'])->name('reservations.store.step-one');
+Route::get('/reservations/step-two', [FrontendReservationController::class, 'stepTwo'])->name('reservations.step-two');
+Route::post('/reservations/step-two', [FrontendReservationController::class, 'storeStepTwo'])->name('reservations.store.step-two');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

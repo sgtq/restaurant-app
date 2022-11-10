@@ -60,7 +60,8 @@
                         <div class="sm:col-span-6">
                             <label for="datetime" class="block text-sm font-medium text-gray-700"> Date </label>
                             <div class="mt-1">
-                                <input type="datetime-local" id="datetime" name="datetime" value="{{ $reservation->datetime }}"
+                                <input type="datetime-local" id="datetime" name="datetime"
+                                       value="{{ $reservation->datetime->format('Y-m-d\TH:i:s') }}"
                                        class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('datetime') border-red-400 @enderror" />
                             </div>
                             @error('datetime')
@@ -72,7 +73,7 @@
                             <select id="table_id" name="table_id"
                                     class="form-select block w-full mt-1 @error('table_id') border-red-400 @enderror">
                                 @foreach ($tables as $table)
-                                <option value="{{ $table->id }}">
+                                <option value="{{ $table->id }}" @selected($table->id == $reservation->table_id)>
                                     {{ $table->name }} ({{ $table->guest_number }} seats)
                                 </option>
                                 @endforeach;

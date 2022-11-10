@@ -93,10 +93,20 @@ class ReservationController extends Controller
      */
     public function update(ReservationStoreRequest $request, Reservation $reservation)
     {
+        $table = Table::findOrFail($request->table_id); // Get Table attributes
+
         // Validate guest_number for selected table
-        $table = Table::findOrFail($request->table_id);
         if ($request->guest_number > $table->guest_number) {
             return back()->with('warning', 'This table does not have enough seats ('.$table->guest_number.')');
+        }
+
+        // Validate table isn't already booked for the date
+        $reservations = $table->reservations()->where('id', '!=', $reservation->id)->get();
+        $request_date = Carbon::parse($request->datetime);
+        foreach ($reservations as $reservation) {
+            if ($reservation->datetime->format('Y-m-d') == $request_date->format('Y-m-d')) {
+                return back()->with('warning', 'This table is already reserved for this date');
+            }
         }
 
         $reservation->update($request->validated());
@@ -113,10 +123,11 @@ class ReservationController extends Controller
      */
     public function destroy(Reservation $reservation)
     {
+        $name = $reservation->name;
         $reservation->delete();
 
         return to_route('admin.reservations.index')
-            ->with('success', "Reservation $reservation->name deleted");
+            ->with('success', "Reservation $name deleted");
     }
 
     private function lists()
